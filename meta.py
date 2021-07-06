@@ -309,7 +309,6 @@ class MetaOptimizer(object):
       """Parameter and RNN state update."""
       with tf.name_scope("gradients"):
         gradients = tf.gradients(fx, x)
-
         # Stopping the gradient here corresponds to what was done in the
         # original L2L NIPS submission. However it looks like things like
         # BatchNorm, etc. don't support second-derivatives so we still need

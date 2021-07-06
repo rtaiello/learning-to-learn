@@ -22,12 +22,14 @@ from six.moves import xrange
 import tensorflow as tf
 
 from tensorflow.contrib.learn.python.learn import monitored_session as ms
+from tqdm import tqdm
 
 import meta
 import util
 
 flags = tf.flags
 logging = tf.logging
+logging.set_verbosity(logging.ERROR)
 
 
 FLAGS = flags.FLAGS
@@ -78,7 +80,7 @@ def main(_):
 
     total_time = 0
     total_cost = 0
-    for _ in xrange(FLAGS.num_epochs):
+    for _ in tqdm(xrange(FLAGS.num_epochs), desc="evaluate"):
       # Training.
       time, cost = util.run_epoch(sess, cost_op, [update], reset,
                                   num_unrolls)

@@ -22,7 +22,7 @@ import os
 
 from six.moves import xrange
 import tensorflow as tf
-
+from tqdm import tqdm
 from tensorflow.contrib.learn.python.learn import monitored_session as ms
 
 import meta
@@ -30,11 +30,12 @@ import util
 
 flags = tf.flags
 logging = tf.logging
+logging.set_verbosity(logging.ERROR)
 
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string("save_path", None, "Path for saved meta-optimizer.")
-flags.DEFINE_integer("num_epochs", 10000, "Number of training epochs.")
+flags.DEFINE_integer("num_epochs", 1000, "Number of training epochs.")
 flags.DEFINE_integer("log_period", 100, "Log period.")
 flags.DEFINE_integer("evaluation_period", 1000, "Evaluation period.")
 flags.DEFINE_integer("evaluation_epochs", 20, "Number of evaluation epochs.")
@@ -76,7 +77,7 @@ def main(_):
     best_evaluation = float("inf")
     total_time = 0
     total_cost = 0
-    for e in xrange(FLAGS.num_epochs):
+    for e in tqdm(xrange(FLAGS.num_epochs), desc="epochs"):
       # Training.
       time, cost = util.run_epoch(sess, cost_op, [update, step], reset,
                                   num_unrolls)
